@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'apply/styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body style="background-image: url('https://images.pexels.com/photos/924824/pexels-photo-924824.jpeg');background-position: center; background-repeat: no-repeat;
+background-size: cover; height:100%; width:100%; min-height:100vh;">
+
+<div class="container-fluid vertical-align ">
+    <div class="col-sm-6 col-sm-offset-3 horizontal-align make-transparent" style="padding:40px;margin-top:30px;margin:bottom:30px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <center>
+                    <img src="http://sptbi.spit.ac.in/assets/img/logo.png" width="200" height="50" alt="">
+                </center>
+                <h2 style="margin-top:30px;color:white;">Sign Up</h2>
+                <h4 style="margin-bottom:30px;color:white;">
+                    <span>Not yet a user? </span><a href="{% url 'apply:login_user' %}">Login</a>
+                </h4>
+                {% if error_message %}
+                <p><span class="text-danger small">{{ error_message }}</span></p>
+                {% endif %}
+                <p><span class="text-danger small">All fields are mandatory.</span></p>
+                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" style="color:white;">{{ field.label_tag }}</label>
+                        {{ field }}
+                        <span class="text-danger small">{{ field.errors }}</span>
+                    </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="phone_number" style="color:white;" >Contact No:</label>
+                        <input type="number" min="10000000" id="phone_number" name="phone_number" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualification" style="color:white;">Qualification:</label>
+                        <input type="text" id="qualification" name="qualification" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="interests" style="color:white;">Interests:</label>
+                        <input type="text" id="interests" name="interests" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="current_city" style="color:white;" >City:</label>
+                        <input type="text" id="current_city" name="current_city" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo" class="control-label col-sm-2" style="color:white;">Photo:</label>
+                        <input type="file" name="photo" id="photo" accept="image/jpeg, image/png" style="color:white;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resume" class="control-label col-sm-2" style="color:white;">Resume:</label>
+                        <input type="file" name="resume" id="resume" accept="application/pdf" style="color:white;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address" class="control-label col-sm-2" style="color:white;" >Address:</label>
+                        <textarea id="address" name="address" class="form-control" required></textarea>
+                    </div>
+
+                    <center>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            {% if request.GET.next %}
+                                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary " style="margin-top:30px;">Sign Up</button>
+                        </div>
+                    </div>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

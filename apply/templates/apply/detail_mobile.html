@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'apply/styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card mt-4">
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="table-cell">
+                            <h4><strong>{{ job.job_title }}</strong>
+                            </h4>
+                            <h6>{{ job.company.name }}</h6>
+                        </div>
+                        <table class="table no-border">
+                            <tbody>
+                            <tr>
+                                <th>Category:</th>
+                                <td>{{ job.job_category }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type:</th>
+                                <td>{{ job.job_type }}</td>
+                            </tr>
+                            <tr>
+                                <th>Salary:</th>
+                                <td>{{ job.salary }}</td>
+                            </tr>
+                            <tr>
+                                <th>Intake:</th>
+                                <td>{{ job.intake }}</td>
+                            </tr>
+                            <tr>
+                                <th>Duration:</th>
+                                <td>{{ job.duration }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </li>
+                </ul>
+
+            </div>
+            <div class="card mt-4">
+                <ul class="list-group">
+                    <li class="list-group-item ">
+                        <h4><strong>About {{ job.company.name }}:</strong></h4>
+                        <p>{{ job.company.description }}</p>
+                        <h5><strong>About the Internship:</strong></h5>
+                        <p>{{ job.description }}</p>
+                        <h5><strong>Other Requirements:</strong></h5>
+                        <p>{{ job.other_requirements }}</p>
+                        <h5><strong>Perks:</strong></h5>
+                        <p>{{ job.perks }}</p>
+
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+    <center>
+        <!-- Button trigger modal -->
+        {% if isStudent %}
+            {% if hasApplied %}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        style="width:100px;margin:20px;" disabled>
+                    Apply
+                </button>
+                <p>You have already applied here. </p>
+            {% else %}
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        style="width:100px;margin:20px;">
+                    Apply
+                </button>
+            {% endif %}
+        {% else %}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                    style="width:100px;margin:20px;" disabled>
+                Apply
+            </button>
+            <p>You need to be a registered applicant to apply. Click here to <a href="{% url 'apply:login_user' %}?next={{ request.path|urlencode }}">login</a> </p>
+        {% endif %}
+    </center>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span>By applying you send your details like email, phone number and resume to {{ job.company.name }}. Do you wish to proceed?</span>
+                </div>
+                <div class="modal-footer">
+                    <form id="applyForm" class="form-horizontal" role="form" action="" method="post"
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'apply/styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body style="background-image: url('https://images.pexels.com/photos/924824/pexels-photo-924824.jpeg');background-position: center; background-repeat: no-repeat;
+background-size: cover; height:100%; width:100%; min-height:100vh;">
+
+<div class="container vertical-align">
+    <div class="col-sm-6 col-sm-offset-3 col-md-6 horizontal-align make-transparent"
+         style="margin-top:30px;margin-bottom:30px;padding:40px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <center>
+                    <img src="http://sptbi.spit.ac.in/assets/img/logo.png" width="200" height="50" alt="">
+                </center>
+                <h2 style="color:white;margin-top:30px;">Sign Up</h2>
+                <h4 style="color:white;margin-bottom:30px;">
+                    <span>Already a user? </span><a href="{% url 'hire:login_user' %}">Login</a>
+                </h4>
+                <p><span class="text-danger small">All fields are mandatory.</span></p>
+                <form class="form-horizontal" method="post" action="">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label class="control-label" for="company_name" style="color:white;">Company Name:</label>
+                        <input class="form-control" type="tel" id="company_name" name="company_name" required>
+                    </div>
+
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ field.label_tag }}</label>
+                        {{ field }}
+                    </div>
+                    <span class="text-danger small">{{ field.errors }}</span>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        <label class="control-label" for="phone_number" style="color:white;">Contact No:</label>
+                        <input class="form-control" min="10000000" type="number" id="phone_number" name="phone_number"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="control-label" style="color:white;">Company Description:</label>
+                        <textarea class="form-control" id="description" name="description" required></textarea>
+                    </div>
+
+                    {% if error_message %}
+                    <p><span class="text-danger">{{ error_message }}</span></p>
+                    {% endif %}
+
+                    <center>
+                        <button type="submit" class="btn btn-primary" style="margin-top:30px;">Sign Up</button>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

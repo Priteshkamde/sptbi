@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'home/stylesHome.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800&amp;subset=devanagari,latin-ext" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="http://sptbi.spit.ac.in/assets/img/logo.png" width="200" height="50" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">About us</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>
+
+
+<div class="hero-image">
+  <div class="hero-text">
+      <h1 style="font-size:50px"><b>Welcome to SP TBI</b></h1>
+    <h3>Job Internship Portal</h3><br><br>
+    <button class="btn btn-light btn-lg" onclick="location.href='{% url 'apply:index' %}'" style="margin:20px;">
+        <i class="material-icons md-48"> work</i>  I want to Work </button>
+
+
+    <button class="btn btn-outline-light btn-lg" onclick="location.href='{% url 'hire:login_user' %}'" style="margin:20px;">
+        <i class="material-icons md-48">assignment_turned_in</i>  I want to Hire </button>
+  </div>
+</div>
+
+
+</body>
+</html>

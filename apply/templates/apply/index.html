@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'apply/styles.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-9 mx-auto col-xs-12 col-sm-12">
+            <div class="card mt-4">
+                <ul class="list-group">
+                    {% for job in jobs %}
+                    <li class="list-group-item inline">
+                        <div class="table-cell">
+                            <h4><strong><a href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a></strong></h4>
+                            <h6><a href="#">{{ job.company.name }}</a> </h6>
+                        </div>
+
+                        <div id="left" style="margin-top:20px;float:left; width: 90%;">
+                            <table class="table no-border">
+                                <tbody>
+                                <tr>
+                                    <td>Category</td>
+                                    <td>Type</td>
+                                    <td>Salary</td>
+                                    <td>Intake</td>
+                                    <td>Duration</td>
+                                </tr>
+
+                                <tr>
+                                    <td>{{ job.job_category }}</td>
+                                    <td>{{ job.job_type }}</td>
+                                    <td>{{ job.salary }}</td>
+                                    <td>{{ job.intake }}</td>
+                                    <td>{{ job.duration }} months</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="middle" style="margin-top:10%;float:left; width: 10%;">
+                            <a class="btn btn-primary" href="{% url 'apply:detail' pk=job.id %}">View</a>
+                        </div>
+
+                    </li>
+                    {% endfor here %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
