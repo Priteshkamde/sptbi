@@ -1,0 +1,36 @@
+.vertical-align {
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.horizontal-align {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+
+/*noinspection ALL*/
+.make-transparent {
+    background: rgb(0, 0, 0, .3);
+}
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    padding: 40px;
+
+}
+
+.table.no-border tr td, .table.no-border tr th {
+    border-width: 0;
+    padding: 0px;
+}

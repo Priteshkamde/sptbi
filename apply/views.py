@@ -1,15 +1,14 @@
 from .forms import UserForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Student
-from hire.models import Company, JobPost, Applications
-from django.shortcuts import render, get_list_or_404, get_object_or_404, redirect
+from hire.models import JobPost, Applications
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 
@@ -54,7 +53,7 @@ def detail(request, pk):
 def profile(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if not request.user.is_authenticated:
-        return login_user(request)
+        return redirect('apply:login')
     elif student.user != request.user:
         isSelf = False
     else:
@@ -81,25 +80,59 @@ def login_user(request):
     return render(request, 'apply/login.html')
 
 
+def verify_email(request, pk, slug):
+    try:
+        email = force_text(urlsafe_base64_decode(slug))
+        user = User.objects.get(pk=pk)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+        email = None
+
+    if user.is_active:
+        return redirect('apply:index')
+
+    if request.method == "POST":
+        if request.POST['confirm']:
+            current_site = get_current_site(request)
+            mail_subject = 'Activate your SPTBI account.'
+            message = render_to_string('apply/acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token': account_activation_token.make_token(user),
+            })
+            email_message = EmailMessage(
+                mail_subject, message, to=[email]
+            )
+            email_message.content_subtype = "html"
+            email_message.send()
+            return render(request, 'apply/confirm_acc.html', {'user': user})
+    return render(request, 'apply/confirm_acc.html', {'user': user})
+
+
 def activate(request, uidb64, token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
+        user = get_object_or_404(User, pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
+
+    if user.is_active:
+        return redirect('apply:index')
+
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
         login(request, user)
-        # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        return render(request, 'apply/confirm_success.html')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return render(request, 'apply/confirm_success.html', {'error_message': 'Invalid verification link'})
 
 
 def register_user(request):
     if request.user.is_authenticated and Student.objects.filter(user=request.user).exists():
         return redirect('apply:index')
+
     user_form = UserForm(request.POST or None)
     if user_form.is_valid():
         user = user_form.save(commit=False)
@@ -122,7 +155,7 @@ def register_user(request):
         student.save()
 
         current_site = get_current_site(request)
-        mail_subject = 'Activate your blog account.'
+        mail_subject = 'Activate your SPTBI account.'
         message = render_to_string('apply/acc_active_email.html', {
             'user': user,
             'domain': current_site.domain,
@@ -134,20 +167,8 @@ def register_user(request):
         )
         email_message.content_subtype = "html"
         email_message.send()
-        return HttpResponse('Please confirm your email address to complete the registration')
+        return redirect('apply:verify', user.pk, urlsafe_base64_encode(force_bytes(email)).decode())
 
-        '''user = authenticate(username=email, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                if "next" in request.POST:
-                    return redirect(request.POST.get("next"))
-                else:
-                    jobs = JobPost.objects.all()
-                    if request.user_agent.is_mobile:
-                        return render(request, 'apply/index_mobile.html', {'jobs': jobs})
-                    else:
-                        return render(request, 'apply/index.html', {'jobs': jobs})'''
     context = {
         "form": user_form,
     }

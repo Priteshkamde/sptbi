@@ -15,6 +15,7 @@
         margin: auto;
 }
 
+/*noinspection ALL*/
 .make-transparent{
     background: rgb(0,0,0,.3);
 }

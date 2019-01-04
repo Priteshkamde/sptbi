@@ -1,0 +1,32 @@
+{% extends 'home/base.html' %}
+{% block title %}Email Verification{% endblock %}
+
+{% block body %}
+
+<div class="container horizontal-align vertical-align">
+    <center>
+
+        <h3>
+            Confirm Your Account
+        </h3>
+        <h5>
+            A mail has been sent to {{ user.email }}. Please click on the verification link sent on your email to verify
+            your
+            account.
+        </h5>
+
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-lg btn-outline btn-success" name="confirm" type="submit" style="margin:20px;">Resend
+                Email
+            </button>
+            {% if error_message %}
+                <p><span class="text-danger">{{ error_message }}</span></p>
+            {% endif %}
+        </form>
+    </center>
+
+</div>
+
+
+{% endblock %}

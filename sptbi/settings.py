@@ -25,7 +25,7 @@ SECRET_KEY = '(u689n3^!s^7e_)ua&8wj)3w#_jg&=dbhgb-(ft)m#3&b+-la#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.7', '192.168.101.131']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.4', '192.168.101.131']
 
 
 # Application definition
@@ -147,3 +147,5 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
