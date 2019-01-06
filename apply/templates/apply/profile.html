@@ -1,40 +1,50 @@
 {% extends 'home/base.html' %}
 {% block title %}{{ student.user.first_name }} {{ student.user.last_name }}{% endblock %}
-
+{% load staticfiles %}
 {% block body %}
+<!--suppress ALL -->
 <div class="container emp-profile">
     <div class="row" style="margin-top:50px;">
         <div class="col-md-4 col-xs-4">
-            <div class="image-container" style="height:300px;width:300px;">
-                <img src="{{ student.photo.url }}" style="height:100%;width:100%;">
-            </div>
+            <center>
+                <div class="image-container" style="height:300px;width:300px;">
+                    {% ifequal student.photo 'False' %}
+                    <img src="{% static 'home/default.png' %}" style="height:100%;width:100%;">
+                    {% else %}
+                    <img src="{{ student.photo.url }}" style="height:100%;width:100%;">
+                    {% endifequal %}
+                </div>
+            </center>
         </div>
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-8 col-xs-8">
             <div class="profile-head">
-                <h5>
+                <h4 style="margin-bottom: 20px; margin-top: 20px;">
                     {{ student.user.first_name }} {{ student.user.last_name }}
-                </h5>
+                </h4>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                            aria-controls="home" aria-selected="true">About</a>
                     </li>
+                    {% if isSelf %}
                     <li class="nav-item">
-                        {% if isSelf %}
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                            aria-controls="profile" aria-selected="false">Timeline</a>
-                        {% endif %}
                     </li>
+                    <li class="nav-item">
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" href="">Edit Profile</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
 
 
-            <div class="col-md-8 col-xs-8" style="margin-top:20px;">
+            <div class="col-md-12 col-xs-12" style="margin-top:20px;">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
                         <div class="row">
-                            <div class="col-md-6 col-xs-6" >
+                            <div class="col-md-6 col-xs-6">
                                 <label><strong>Name:</strong></label>
                             </div>
                             <div class="col-md-6 col-xs-6">
@@ -70,10 +80,12 @@
                                 <label><strong>Interests:</strong></label>
                             </div>
                             <div class="col-md-6 col-xs-6">
-                                <p>{{ student.interests }}</p>
+                                {% for interest in interests %}
+                                <span class="badge badge-primary">{{ interest.interest }}</span>
+                                {% endfor %}
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" style="margin-top: 10px;">
                             <div class="col-md-6 col-xs-6">
                                 <label><strong>City:</strong></label>
                             </div>
@@ -100,12 +112,14 @@
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row">
-                            <div class="col-md-6 col-xs-6">
+                            <div class="col-md-12 col-xs-12">
                                 <ul class="list-group">
                                     {% for application in applications %}
-                                    <li class="list-group-item">
-                                        <a href="{% url 'apply:detail' pk=application.post.id %}">{{ application.post.job_title }}</a>
-                                    </li>
+                                    <a style="color: blue;text-decoration: none;" href="{% url 'apply:detail' pk=application.post.id %}">
+                                        <li class="list-group-item">
+                                            <strong>{{ application.post.job_title }}</strong>
+                                        </li>
+                                    </a>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -114,13 +128,6 @@
                 </div>
             </div>
         </div>
-        {% if isSelf %}
-        <div class="row">
-            <div class="col-md-4 col-xs-4" style="margin:20px;">
-                <a href="" class="btn btn-secondary">Edit Profile</a>
-            </div>
-        </div>
-        {% endif %}
     </div>
 
 </div>

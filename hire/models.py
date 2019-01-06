@@ -14,6 +14,9 @@ class Company(models.Model):
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=False)
     description = models.CharField(max_length=10000)
 
+    def __str__(self):
+        return self.name
+
 
 class JobPost(models.Model):
     job_title = models.CharField(max_length=100)

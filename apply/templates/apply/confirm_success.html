@@ -10,14 +10,10 @@
         {% if error_message %}
             <h3><span class="text-danger">{{ error_message }}</span></h3>
         {% else %}
-            <h3 class="text-success">
-                <span>Your Account has been verified</span>
+            <h3 class="text-success ">
+                <span>Your Account has been verified.</span>
             </h3>
 
-            <button class="btn btn-lg btn-outline btn-success" name="confirm" type="button"
-                    onclick="location.href='{% url 'apply:index' %}'" style="margin:20px;">
-                Continue using SP-TBI
-            </button>
         {% endif %}
     </center>
 

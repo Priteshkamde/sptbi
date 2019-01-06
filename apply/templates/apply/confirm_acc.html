@@ -17,8 +17,11 @@
 
         <form method="post">
             {% csrf_token %}
-            <button class="btn btn-lg btn-outline btn-success" name="confirm" type="submit" style="margin:20px;">Resend
-                Email
+            <button class="btn btn-lg btn-outline btn-success" name="confirm" value="resend" type="submit" style="margin:20px;">
+                Resend Email
+            </button>
+            <button class="btn btn-lg btn-outline btn-success" name="confirm" value="continue" type="submit" style="margin:20px;">
+                Already Verified?
             </button>
             {% if error_message %}
                 <p><span class="text-danger">{{ error_message }}</span></p>

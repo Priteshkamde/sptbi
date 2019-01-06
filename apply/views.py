@@ -1,6 +1,8 @@
+from django.http import HttpResponseRedirect
+
 from .forms import UserForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Student
+from .models import Student, Interests
 from hire.models import JobPost, Applications
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -58,8 +60,10 @@ def profile(request, pk):
         isSelf = False
     else:
         isSelf = True
+    interests = Interests.objects.filter(student=student)
     applications = Applications.objects.filter(student=student)
-    return render(request, 'apply/profile.html', {'student': student, 'applications': applications, 'isSelf': isSelf})
+    return render(request, 'apply/profile.html',
+                  {'student': student, 'applications': applications, 'isSelf': isSelf, 'interests': interests})
 
 
 def login_user(request):
@@ -72,6 +76,8 @@ def login_user(request):
         if user is not None and Student.objects.filter(user=user).exists():
             if user.is_active:
                 login(request, user)
+                if request.POST.get('next'):
+                    return HttpResponseRedirect(request.POST.get('next', '/'))
                 return redirect('apply:index')
             else:
                 return render(request, 'apply/login.html', {'error_message': 'Your account is not active.'})
@@ -92,7 +98,7 @@ def verify_email(request, pk, slug):
         return redirect('apply:index')
 
     if request.method == "POST":
-        if request.POST['confirm']:
+        if request.POST['confirm'] == "resend":
             current_site = get_current_site(request)
             mail_subject = 'Activate your SPTBI account.'
             message = render_to_string('apply/acc_active_email.html', {
@@ -107,6 +113,17 @@ def verify_email(request, pk, slug):
             email_message.content_subtype = "html"
             email_message.send()
             return render(request, 'apply/confirm_acc.html', {'user': user})
+        elif request.POST['confirm'] == "continue":
+            if user.is_active:
+                login(request, user)
+                return redirect('apply:index')
+            else:
+                return render(request, 'apply/confirm_acc.html',
+                              {'user': user,
+                               'error_message':
+                                   "Your account is not yet verified. Did you click on the link you received on your email? Didn't recieve an email? Try resend email."
+                               })
+
     return render(request, 'apply/confirm_acc.html', {'user': user})
 
 
@@ -123,7 +140,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
         return render(request, 'apply/confirm_success.html')
     else:
         return render(request, 'apply/confirm_success.html', {'error_message': 'Invalid verification link'})
@@ -147,12 +163,15 @@ def register_user(request):
         student.user = user
         student.phone_number = request.POST['phone_number']
         student.current_city = request.POST['current_city']
-        student.interests = request.POST['interests']
         student.address = request.POST['address']
         student.qualification = request.POST['qualification']
         student.photo = request.FILES.get('photo', False)
         student.resume = request.FILES.get('resume', False)
         student.save()
+
+        interests = str(request.POST['interests']).split(",")
+        for interest in interests:
+            Interests(student=student, interest=interest).save()
 
         current_site = get_current_site(request)
         mail_subject = 'Activate your SPTBI account.'

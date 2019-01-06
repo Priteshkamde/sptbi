@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 
@@ -17,4 +17,17 @@ class Student(models.Model):
     current_city = models.CharField(max_length=20)
     photo = models.ImageField(upload_to='media/photos', blank=True)
     resume = models.FileField(upload_to='media/resume', blank=True)
-    interests = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
+
+
+@receiver(post_delete, sender=Student)
+def submission_delete(sender, instance, **kwargs):
+    instance.photo.delete(False)
+    instance.resume.delete(False)
+
+
+class Interests(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    interest = models.CharField(max_length=200)

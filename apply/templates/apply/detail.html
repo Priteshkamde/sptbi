@@ -66,24 +66,25 @@
     <center>
         <!-- Button trigger modal -->
         {% if isStudent %}
-            {% if hasApplied %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        style="width:100px;margin:20px;" disabled>
-                    Apply
-                </button>
-                <p>You have already applied here. </p>
-            {% else %}
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                        style="width:100px;margin:20px;">
-                    Apply
-                </button>
-            {% endif %}
+        {% if hasApplied %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                style="width:100px;margin:20px;" disabled>
+            Apply
+        </button>
+        <p>You have already applied here. </p>
         {% else %}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
-                    style="width:100px;margin:20px;" disabled>
-                Apply
-            </button>
-            <p>You need to be a registered applicant to apply. Click here to <a href="{% url 'apply:login_user' %}">login</a> </p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                style="width:100px;margin:20px;">
+            Apply
+        </button>
+        {% endif %}
+        {% else %}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                style="width:100px;margin:20px;" disabled>
+            Apply
+        </button>
+        <p>You need to be a registered applicant to apply. Click here to <a
+                href="{% url 'apply:login_user' %}?next={{ request.path|urlencode }}">login</a></p>
         {% endif %}
     </center>
 

@@ -34,7 +34,10 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
             </center>
             <h3 style="margin-top:30px;color:white;">Login</h3>
             <h5 style="color:white;">
-                <span>Not yet a user? </span><a href="{% url 'apply:register_user' %}">Register</a>
+                <span>Not yet a user? </span>
+                <a href="{% if request.GET.next %}{% url 'apply:register_user' %}?next={{ request.GET.next }}{% else %}{% url 'apply:register_user' %}{% endif %}">
+                        Register
+                    </a>
             </h5>
             <form class="form-horizontal" method="post" action="">
                 {% csrf_token %}

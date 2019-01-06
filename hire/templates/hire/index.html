@@ -13,22 +13,22 @@
                 </h5>
                 <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                            aria-controls="home" aria-selected="true">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                            aria-controls="profile" aria-selected="false">Timeline</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="applicants-tab" data-toggle="tab" href="#applications" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="applicants-tab" data-toggle="tab" href="#applications" role="tab"
                            aria-controls="application" aria-selected="false">Applications</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'hire:post_job' %}">Post</a>
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" href="{% url 'hire:post_job' %}">Post</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Edit Profile</a>
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" href="">Edit Profile</a>
                     </li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
                         <div class="row">
-                            <div class="col-md-6 col-xs-6" >
+                            <div class="col-md-6 col-xs-6">
                                 <label><strong>Name:</strong></label>
                             </div>
                             <div class="col-md-6 col-xs-6">
@@ -75,12 +75,17 @@
 
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row">
-                            <div class="col-md-6 col-xs-6">
+                            <div class="col-md-12 col-xs-12">
                                 <ul class="list-group">
                                     {% for job in jobs %}
-                                    <li class="list-group-item">
-                                        <a href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a>
-                                    </li>
+                                    <a style="color: blue;text-decoration: none;"
+                                       href="{% url 'apply:detail' pk=job.id %}">
+                                        <li class="list-group-item">
+                                            <strong>
+                                            {{ job.job_title }}
+                                            </strong>
+                                        </li>
+                                    </a>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -89,16 +94,19 @@
 
                     <div class="tab-pane fade" id="applications" role="tabpanel" aria-labelledby="applicants-tab">
                         <div class="row">
-                            <div class="col-md-6 col-xs-6">
+                            <div class="col-md-12 col-xs-12">
                                 <ul class="list-group">
                                     {% for application in applications %}
-                                        {% for applicant in application %}
-                                            <li class="list-group-item">
-                                                <a href="{% url 'apply:profile' pk=applicant.student.id %}">
-                                                    {{ applicant.student.user.first_name }} {{ applicant.student.user.last_name }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
+                                    {% for applicant in application %}
+                                    <a style="color: blue;text-decoration: none;"
+                                       href="{% url 'apply:profile' pk=applicant.student.id %}">
+                                        <li class="list-group-item">
+                                            <strong>
+                                                {{ applicant.student.user.first_name }} {{ applicant.student.user.last_name }}
+                                            </strong>
+                                        </li>
+                                    </a>
+                                    {% endfor %}
                                     {% endfor %}
                                 </ul>
                             </div>
