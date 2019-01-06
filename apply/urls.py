@@ -1,14 +1,15 @@
 from django.conf.urls import url
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.views.decorators.cache import never_cache
 from . import views
 
 
 app_name = 'apply'
 
 urlpatterns = [
-    path('login/', views.login_user, name='login_user'),
-    path('register/', views.register_user, name='register_user'),
+    path('login/', never_cache(views.login_user), name='login_user'),
+    path('register/', never_cache(views.register_user), name='register_user'),
     path('logout/', views.logout_user, name='logout_user'),
     path('detail/<int:pk>', views.detail, name='detail'),
     path('profile/<int:pk>', views.profile, name='profile'),

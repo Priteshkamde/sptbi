@@ -1,12 +1,13 @@
 from django.urls import path
 from django.conf.urls import url
+from django.views.decorators.cache import never_cache
 from . import views
 
 app_name = 'hire'
 
 urlpatterns = [
-    path('login/', views.login_user, name='login_user'),
-    path('register/', views.register_user, name='register_user'),
+    path('login/', never_cache(views.login_user), name='login_user'),
+    path('register/', never_cache(views.register_user), name='register_user'),
     path('logout/', views.logout_user, name='logout_user'),
     path('post/', views.post_job, name='post_job'),
     path('verify/<int:pk>/<slug:slug>', views.verify_email, name='verify'),
