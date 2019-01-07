@@ -29,5 +29,8 @@ def submission_delete(sender, instance, **kwargs):
 
 
 class Interests(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ManyToManyField(Student)
     interest = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.interest

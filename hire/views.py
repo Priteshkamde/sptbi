@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserForm, JobPostForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Company, JobPost, Applications
+from .models import Company, JobPost, Applications, JobCategory
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -19,6 +19,15 @@ def post_job(request):
         job_post = form.save(commit=False)
         job_post.company = Company.objects.filter(user=request.user)[0]
         job_post.save()
+        categories = str(request.POST['job_category']).lower().split(",")
+        for category in categories:
+            if JobCategory.objects.filter(job_category=category).exists():
+                j = JobCategory.objects.filter(job_category=category)[0]
+            else:
+                j = JobCategory(job_category=category)
+                j.save()
+            j.job_post.add(job_post)
+            j.save()
         return redirect('hire:index')
     return render(request, 'hire/post.html', {'form': form})
 

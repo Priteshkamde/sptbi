@@ -20,7 +20,6 @@ class Company(models.Model):
 
 class JobPost(models.Model):
     job_title = models.CharField(max_length=100)
-    job_category = models.CharField(max_length=100)
     job_type = models.CharField(max_length=100, choices=(('Full Time', 'Full Time'), ('Part Time', 'Part Time')))
     salary = models.CharField(max_length=100)
     intake = models.IntegerField()
@@ -29,6 +28,11 @@ class JobPost(models.Model):
     description = models.CharField(max_length=10000)
     other_requirements = models.CharField(max_length=10000)
     perks = models.CharField(max_length=10000)
+
+
+class JobCategory(models.Model):
+    job_category = models.CharField(max_length=100)
+    job_post = models.ManyToManyField(JobPost)
 
 
 class Applications(models.Model):

@@ -17,9 +17,6 @@ class JobPostForm(forms.ModelForm):
     job_title = forms.CharField(required=True, label="Title:",
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    job_category = forms.CharField(required=True, label="Category:",
-                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-
     job_type = forms.ChoiceField(required=True, label="Type",
                                  choices=(('Full Time', 'Full Time'), ('Part Time', 'Part Time')),
                                  widget=forms.Select(attrs={'class': 'form-control'}))
@@ -44,5 +41,5 @@ class JobPostForm(forms.ModelForm):
 
     class Meta:
         model = JobPost
-        fields = ('job_title', 'job_category', 'job_type', 'salary', 'intake', 'duration',
+        fields = ('job_title', 'job_type', 'salary', 'intake', 'duration',
                   'description', 'other_requirements', 'perks')

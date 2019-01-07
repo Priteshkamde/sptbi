@@ -21,7 +21,11 @@
                             <tbody>
                             <tr>
                                 <th>Category:</th>
-                                <td>{{ job.job_category }}</td>
+                                <td>
+                                    {% for category in categories %}
+                                    <span class="badge badge-secondary">{{ category.job_category }}</span>
+                                    {% endfor %}
+                                </td>
                             </tr>
                             <tr>
                                 <th>Type:</th>

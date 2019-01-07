@@ -30,7 +30,11 @@
                                 </tr>
 
                                 <tr>
-                                    <td>{{ job.job_category }}</td>
+                                    <td>
+                                        {% for category in categories %}
+                                        <span class="badge badge-secondary">{{ category.job_category }}</span>
+                                        {% endfor %}
+                                    </td>
                                     <td>{{ job.job_type }}</td>
                                     <td>{{ job.salary }}</td>
                                     <td>{{ job.intake }}</td>

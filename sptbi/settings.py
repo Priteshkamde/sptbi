@@ -25,7 +25,7 @@ SECRET_KEY = '(u689n3^!s^7e_)ua&8wj)3w#_jg&=dbhgb-(ft)m#3&b+-la#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.4', '192.168.101.131']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.6', '192.168.101.131']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_user_agents',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -136,8 +137,8 @@ MEDIA_URL = '/media/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = '<email here>'
-EMAIL_HOST_PASSWORD = '<password here>'
+EMAIL_HOST_USER = '<rohan.jagtap@spit.ac.in>'
+EMAIL_HOST_PASSWORD = 'nigganigganigga'
 EMAIL_PORT = 587
 
 
