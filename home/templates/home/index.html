@@ -2,19 +2,61 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-<div class="hero-image">
-    <div class="hero-text">
-        <h1 style="font-size:50px"><b>Welcome to SP TBI</b></h1>
-        <h3>Job Internship Portal</h3><br><br>
-        <button class="btn btn-light btn-lg" onclick="location.href='{% url 'apply:index' %}'" style="margin:20px;">
-            <i class="material-icons md-48"> work</i> I want to Work
-        </button>
+<!--suppress ALL -->
+<div id="demo" class="carousel slide" data-ride="carousel">
 
+    <!-- Indicators -->
+    <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+    </ul>
 
-        <button class="btn btn-outline-light btn-lg" onclick="location.href='{% url 'hire:login_user' %}'"
-                style="margin:20px;">
-            <i class="material-icons md-48">assignment_turned_in</i> I want to Hire
-        </button>
+    <!-- The slideshow -->
+    <div class="carousel-inner">
+        <div class="carousel-item active vertical-align hero-image"
+             style="background-image: url('/static/home/images/background_home_1.jpeg');">
+            <div class="hero-text vertical-align">
+                <div class="wow slideInUp" >
+                    <h1 style="color: white;font-size:50px;">
+                        Welcome To SPTBI
+                    </h1><br><br>
+                    <button class="btn btn-lg" style="background-color: #ff0066;color: white;">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item vertical-align hero-image"
+            style="background-image: url('https://images.pexels.com/photos/1059122/pexels-photo-1059122.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');">
+            <div class="hero-text vertical-align">
+                <div class="wow slideInUp" >
+                    <h1 style="color: white;font-size:50px;">
+                        Welcome To SPTBI
+                    </h1><br><br>
+                    <button class="btn btn-lg" style="background-color: #ff0066;color: white;">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Left and right controls -->
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
 </div>
+<style>
+    /* Make the image fully responsive */
+    .carousel-inner img {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+<script>
+    new WOW().init();
+</script>
 {% endblock %}

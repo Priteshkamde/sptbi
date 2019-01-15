@@ -25,35 +25,57 @@
     <script src="{% static 'home/tagsinput.js' %}" type="text/javascript"></script>
 
 </head>
-<body>
+<body background="{% static 'home/images/background.jpeg' %}" style="background-position: center;background-repeat: no-repeat;background-size: cover;height:100%;width:100%;position: relative;
+            /* Workaround for some mobile browsers */
+            min-height:100vh;">
 {% load widget_tweaks %}
-<div class="container">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light ">
+    <a class="navbar-brand" href="#">
+        <img src="/static/home/images/logo.png" width="200" height="50" alt="">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About us</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container" style="padding-top: 100px;padding-bottom: 100px;">
 
     <div class="row">
         <div class="col-lg-4">
-            <div class="card bg-secondary" style="margin: 20px;padding: 20px;">
+            <div class="card" style="margin: 20px;padding: 20px;">
                 <h4>
                     Filters
                 </h4>
                 <form class="form-horizontal" method="post">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="category" class="control-label" style="color:white;" >Job Category:</label>
-                        <input {% if job_category %} value="{{ job_category }}" {% endif %} id="category" name="category" class="form-control" data-role="tagsinput" >
+                        <label for="category" class="control-label">Job Category:</label>
+                        <input {% if job_category %} value="{{ job_category }}" {% endif %} id="category"
+                               name="category" class="form-control" data-role="tagsinput">
                     </div>
                     <div class="form-group">
-                        <label class="control-label" style="color:white;">Job Type:</label>
+                        <label class="control-label">Job Type:</label>
                         {% render_field filters.form.job_type class="form-control" %}
                     </div>
                     <div class="form-group">
-                        <label class="control-label" style="color:white;">Intake:</label>
+                        <label class="control-label">Intake:</label>
                         {% render_field filters.form.intake class="form-control" %}
                     </div>
                     <div class="form-group">
-                        <label class="control-label" style="color:white;">Duration:</label>
+                        <label class="control-label">Duration:</label>
                         {% render_field filters.form.duration class="form-control" %}
                     </div>
-                    <button type="submit" class="btn btn-primary" style="float: right;">
+                    <button type="submit" class="btn" style="color:white;background-color: #ff0066;float: right;">
                         <span>Filter</span>
                     </button>
                 </form>
@@ -66,9 +88,19 @@
                     {% for job in job_list %}
                     <li class="list-group-item inline">
                         <div class="table-cell">
-                            <h4><strong><a href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a></strong>
+                            <h4><strong><a style="text-decoration: none;color: #ff0066;" href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a></strong>
                             </h4>
-                            <h6><a href="#">{{ job.company.name }}</a></h6>
+                            <h6>
+                                <a style="text-decoration: none;color: #ff0066;text-decoration: none;"
+                                   href="{% if company.website %}{{ company.website }}{% endif %}">
+                                    {{ job.company.name }}
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="image-container" style="float: right;">
+                            {% if company.logo %}
+                                <img src="{{ company.logo.url }}" alt="{{ company.name }}">
+                            {% endif %}
                         </div>
 
                         <div id="left" style="margin-top:20px;float:left; width: 90%;">
@@ -100,8 +132,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div id="middle" style="margin-top:10%;float:left; width: 10%;">
-                            <a class="btn btn-primary" href="{% url 'apply:detail' pk=job.id %}">View</a>
+                        <div style="margin-top:10%;float:left; width: 10%;">
+                            <a class="btn" style="color:white;background-color: #ff0066" href="{% url 'apply:detail' pk=job.id %}">View</a>
                         </div>
 
                     </li>
@@ -110,12 +142,12 @@
                     {% for job in filters.qs %}
                     <li class="list-group-item inline">
                         <div class="table-cell">
-                            <h4><strong><a href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a></strong>
+                            <h4><strong><a style="text-decoration: none;color: #ff0066" href="{% url 'apply:detail' pk=job.id %}">{{ job.job_title }}</a></strong>
                             </h4>
-                            <h6><a href="#">{{ job.company.name }}</a></h6>
+                            <h6><a style="text-decoration: none;color: #ff0066" href="#">{{ job.company.name }}</a></h6>
                         </div>
 
-                        <div id="left" style="margin-top:20px;float:left; width: 90%;">
+                        <div style="margin-top:20px;float:left; width: 90%;">
                             <table class="table no-border">
                                 <tbody>
                                 <tr>
@@ -144,8 +176,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div id="middle" style="margin-top:10%;float:left; width: 10%;">
-                            <a class="btn btn-primary" href="{% url 'apply:detail' pk=job.id %}">View</a>
+                        <div style="margin-top:10%;float:left; width: 10%;">
+                            <a style="color:white;background-color: #ff0066" class="btn" href="{% url 'apply:detail' pk=job.id %}">View</a>
                         </div>
 
                     </li>

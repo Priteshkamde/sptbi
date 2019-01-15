@@ -25,7 +25,7 @@ SECRET_KEY = '(u689n3^!s^7e_)ua&8wj)3w#_jg&=dbhgb-(ft)m#3&b+-la#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.6', '192.168.101.131']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.2.8', '192.168.43.184', '192.168.101.131']
 
 
 # Application definition
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'sptbi.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,9 +137,10 @@ MEDIA_URL = '/media/'
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = '<rohan.jagtap@spit.ac.in>'
+EMAIL_HOST_USER = 'rohan.jagtap@spit.ac.in'
 EMAIL_HOST_PASSWORD = 'nigganigganigga'
 EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = 'SPTBI Team <noreply@sptbi.com>'
 
 
 CACHES = {

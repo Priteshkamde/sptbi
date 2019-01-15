@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Post</title>
+    <title>Post- Edit</title>
 
     <link rel="stylesheet" type="text/css" href="{% static 'hire/styles.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'home/tagsinput.css' %}">
@@ -27,7 +27,7 @@
 </head>
 <body background="{% static 'home/images/background.jpeg' %}" style="background-position: center; background-repeat: no-repeat;
 background-size: cover; height:100%; width:100%; min-height:100vh;">
-
+{% load widget_tweaks %}
 <div class="container vertical-align">
     <div class="col-sm-6 col-sm-offset-3 col-md-6 horizontal-align make-transparent" style="margin-top:30px;margin-bottom:30px;padding:30px;">
         <div class="panel panel-default">
@@ -45,7 +45,9 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
 
                     <div class="form-group">
                         <label class="control-label" for="job_category">Job Category:</label>
-                        <input type="text" id="job_category" name="job_category" class="form-control" data-role="tagsinput" required>
+                        <input type="text" id="job_category" name="job_category" class="form-control" data-role="tagsinput"
+                               value="{% for category in categories %}{{ category.job_category }},{% endfor %}"
+                               required>
                     </div>
 
                     <div class="form-group">
@@ -95,7 +97,7 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
                     {% endif %}
 
                     <center>
-                        <button type="submit" class="btn btn-block" style="background-color:#ff0066;color:white;margin-top:30px;">Post</button>
+                        <button type="submit" class="btn btn-block" style="background-color:#ff0066;color:white;margin-top:30px;">Save</button>
                     </center>
                 </form>
             </div>

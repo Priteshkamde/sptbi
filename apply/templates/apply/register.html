@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +26,7 @@
     <script src="{% static 'home/tagsinput.js' %}" type="text/javascript"></script>
 
 </head>
-<body style="background-image: url('https://images.pexels.com/photos/924824/pexels-photo-924824.jpeg');background-position: center; background-repeat: no-repeat;
+<body background="{% static 'home/images/background.jpeg' %}" style="background-position: center; background-repeat: no-repeat;
 background-size: cover; height:100%; width:100%; min-height:100vh;">
 
 <div class="container-fluid vertical-align ">
@@ -34,12 +35,12 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
         <div class="panel panel-default">
             <div class="panel-body">
                 <center>
-                    <img src="http://sptbi.spit.ac.in/assets/img/logo.png" width="200" height="50" alt="">
+                    <img src="/static/home/images/logo.png" width="200" height="50" alt="">
                 </center>
                 <h2 style="margin-top:30px;color:white;">Sign Up</h2>
                 <h4 style="margin-bottom:30px;color:white;">
-                    <span>Not yet a user? </span>
-                    <a href="{% if request.GET.next %}{% url 'apply:login_user' %}?next={{ request.GET.next }}{% else %}{% url 'apply:login_user' %}{% endif %}">
+                    <span>Already a user? </span>
+                    <a style="color: #ff0066;text-decoration: none;" href="{% if request.GET.next %}{% url 'apply:login_user' %}?next={{ request.GET.next }}{% else %}{% url 'apply:login_user' %}{% endif %}">
                         Login
                     </a>
                 </h4>
@@ -51,33 +52,33 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
                     {% csrf_token %}
                     {% for field in form %}
                     <div class="form-group">
-                        <label class="control-label col-sm-2" style="color:white;">{{ field.label_tag }}</label>
+                        <label class="control-label" style="color:white;">{{ field.label_tag }}</label>
                         {{ field }}
                         <span class="text-danger small">{{ field.errors }}</span>
                     </div>
                     {% endfor %}
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="phone_number" style="color:white;">Contact
+                        <label class="control-label" for="phone_number" style="color:white;">Contact
                             No:</label>
                         <input type="number" min="10000000" id="phone_number" name="phone_number" class="form-control"
                                required>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="qualification"
+                        <label class="control-label" for="qualification"
                                style="color:white;">Qualification:</label>
                         <input type="text" id="qualification" name="qualification" class="form-control" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="interests" style="color:white;">Interests:</label>
+                        <label class="control-label" for="interests" style="color:white;">Interests:</label>
                         <input type="text" id="interests" name="interests" class="form-control" data-role="tagsinput"
                                required>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="current_city" style="color:white;">City:</label>
+                        <label class="control-label" for="current_city" style="color:white;">City:</label>
                         <input type="text" id="current_city" name="current_city" class="form-control" required>
                     </div>
 
@@ -93,7 +94,7 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
                     </div>
 
                     <div class="form-group">
-                        <label for="address" class="control-label col-sm-2" style="color:white;">Address:</label>
+                        <label for="address" class="control-label" style="color:white;">Address:</label>
                         <textarea id="address" name="address" class="form-control" required></textarea>
                     </div>
 
@@ -103,7 +104,7 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
                                 {% if request.GET.next %}
                                 <input type="hidden" name="next" value="{{ request.GET.next }}">
                                 {% endif %}
-                                <button type="submit" class="btn btn-primary " style="margin-top:30px;">Sign Up</button>
+                                <button type="submit" class="btn " style="background-color: #ff0066;color: white;margin-top:30px;">Sign Up</button>
                             </div>
                         </div>
                     </center>

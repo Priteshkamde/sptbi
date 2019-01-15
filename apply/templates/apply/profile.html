@@ -3,13 +3,13 @@
 {% load staticfiles %}
 {% block body %}
 <!--suppress ALL -->
-<div class="container emp-profile">
+<div class="container emp-profile" style="padding-top: 100px;padding-bottom: 100px;">
     <div class="row" style="margin-top:50px;">
         <div class="col-md-4 col-xs-4">
             <center>
                 <div class="image-container" style="height:300px;width:300px;">
                     {% ifequal student.photo 'False' %}
-                    <img src="{% static 'home/default.png' %}" style="height:100%;width:100%;">
+                    <img src="/static/home/images/default.png" style="height:100%;width:100%;">
                     {% else %}
                     <img src="{{ student.photo.url }}" style="height:100%;width:100%;">
                     {% endifequal %}
@@ -21,18 +21,26 @@
                 <h4 style="margin-bottom: 20px; margin-top: 20px;">
                     {{ student.user.first_name }} {{ student.user.last_name }}
                 </h4>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a style="color: #000000;text-decoration:none;" class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                        <a style="color: #000000;text-decoration:none;" class="nav-link active" id="home-tab"
+                           data-toggle="tab" href="#home" role="tab"
                            aria-controls="home" aria-selected="true">About</a>
                     </li>
                     {% if isSelf %}
                     <li class="nav-item">
-                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                           aria-controls="profile" aria-selected="false">Timeline</a>
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="profile-tab"
+                           data-toggle="tab" href="#profile" role="tab"
+                           aria-controls="timeline" aria-selected="false">Timeline</a>
                     </li>
                     <li class="nav-item">
-                        <a style="color: #000000;text-decoration:none;" class="nav-link" href="">Edit Profile</a>
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="messages-tab"
+                           data-toggle="tab" href="#messages" role="tab"
+                           aria-controls="messsges" aria-selected="false">Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="color: #000000;text-decoration:none;" class="nav-link" id="edit-profile"
+                           href="{% url 'apply:edit_profile' %}">Edit Profile</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -81,7 +89,7 @@
                             </div>
                             <div class="col-md-6 col-xs-6">
                                 {% for interest in interests %}
-                                <span class="badge badge-primary">{{ interest.interest }}</span>
+                                <span class="badge" style="background-color: #ff0066;color: white;">{{ interest.interest }}</span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -115,13 +123,62 @@
                             <div class="col-md-12 col-xs-12">
                                 <ul class="list-group">
                                     {% for application in applications %}
-                                    <a style="color: blue;text-decoration: none;" href="{% url 'apply:detail' pk=application.post.id %}">
+                                    <a style="color: #ff0066;text-decoration: none;"
+                                       href="{% url 'apply:detail' pk=application.post.id %}">
                                         <li class="list-group-item">
                                             <strong>{{ application.post.job_title }}</strong>
                                         </li>
                                     </a>
                                     {% endfor %}
                                 </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="messages" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <ul class="list-group">
+                                    {% for application in applications %}
+                                    <li class="list-group-item">
+                                        <a style="color: #ff0066;text-decoration: none;" data-toggle="collapse"
+                                           href="#collapse{{ application.id }}">
+                                            <strong>
+                                                {{ application.post.company.name }}- {{ application.post.job_title }}
+                                            </strong>
+                                        </a>
+                                        <div class="panel-collapse collapse" id="collapse{{ application.id }}">
+                                            <ul class="list-group" style="width: 100%;">
+                                                {% for message in messages %}
+                                                {% if message.application == application %}
+                                                <li class="list-group-item">
+                                                    <h6>
+                                                        {{ message.sender.first_name }}
+                                                        <small>{{ message.datetime }}</small>
+                                                    </h6>
+                                                    <p>{{ message.message }}</p>
+                                                </li>
+                                                {% endif %}
+                                                {% endfor %}
+                                                <li class="list-group-item">
+                                                    <form class="form-horizontal" role="form" method="post"
+                                                          enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <textarea class="form-control" name="message"
+                                                                  placeholder="Message" required></textarea>
+                                                        <input type="hidden" name="id" value="{{ application.id }}">
+                                                        <br>
+                                                        <button type="submit" class="btn btn-success"
+                                                                style="float: right;">
+                                                            Send
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+
                             </div>
                         </div>
                     </div>

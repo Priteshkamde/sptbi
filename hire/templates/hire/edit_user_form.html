@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Company- Sign Up</title>
+    <title>Company- Edit Profile</title>
 
     <link rel="stylesheet" type="text/css" href="{% static 'hire/styles.css' %}">
 
@@ -25,63 +24,46 @@
 </head>
 <body background="{% static 'home/images/background.jpeg' %}" style="background-position: center; background-repeat: no-repeat;
 background-size: cover; height:100%; width:100%; min-height:100vh;">
+{% load widget_tweaks %}
 
 <div class="container vertical-align">
     <div class="col-sm-6 col-sm-offset-3 col-md-6 horizontal-align make-transparent"
          style="margin-top:30px;margin-bottom:30px;padding:40px;">
         <div class="panel panel-default">
             <div class="panel-body">
-                <center>
-                    <img src="/static/home/images/logo.png" width="200" height="50" alt="">
-                </center>
-                <h2 style="color:white;margin-top:30px;">Sign Up</h2>
-                <h4 style="color:white;margin-bottom:30px;">
-                    <span>Already a user? </span><a style="color: #ff0066;" href="{% url 'hire:login_user' %}">Login</a>
-                </h4>
+
+                <h2 style="color:white;margin-top:30px;">Edit Profile</h2>
+
                 <p><span class="text-danger small">All fields are mandatory.</span></p>
                 <form class="form-horizontal" method="post" action="">
                     {% csrf_token %}
-
                     <div class="form-group">
-                        <label class="control-label" for="company_name" style="color:white;">Company Name:</label>
-                        <input class="form-control" type="text" id="company_name" name="company_name" required>
+                        <label class="control-label" style="color:white;">{{ form.name.label_tag }}</label>
+                        {% render_field form.name class="form-control"%}
                     </div>
-
-                    {% for field in form %}
                     <div class="form-group">
-                        <label class="control-label" style="color:white;">{{ field.label_tag }}</label>
-                        {{ field }}
+                        <label class="control-label" style="color:white;">{{ form.website.label_tag }}</label>
+                        {% render_field form.website type="url" class="form-control" %}
                     </div>
-                    <span class="text-danger small">{{ field.errors }}</span>
-                    {% endfor %}
-
                     <div class="form-group">
-                        <label class="control-label" for="website" style="color:white;">Company Website:</label>
-                        <input class="form-control" type="url" id="website" name="website">
+                        <label class="control-label" style="color:white;">{{ form.phone_number.label_tag }}</label>
+                        {% render_field form.phone_number class="form-control" %}
                     </div>
-
+                    <div class="form-group" style="color:white;">
+                        <label class="control-label" style="color:white;">{{ form.logo.label_tag }}</label>
+                        {% render_field form.logo type="file" accept="image/jpeg, image/png" style="color:white;" %}
+                    </div>
                     <div class="form-group">
-                        <label class="control-label" for="phone_number" style="color:white;">Contact No:</label>
-                        <input class="form-control" min="60000000" type="number" id="phone_number" name="phone_number"
-                               required>
+                        <label class="control-label" style="color:white;">{{ form.description.label_tag }}</label>
+                        {% render_field form.description class="form-control" %}
                     </div>
-
-                    <div class="form-group">
-                        <label for="logo" class="control-label" style="color:white;">Company Logo:</label>
-                        <input type="file" name="logo" id="logo" accept="image/jpeg, image/png" style="color:white;">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description" class="control-label" style="color:white;">Company Description:</label>
-                        <textarea class="form-control" id="description" name="description" required></textarea>
-                    </div>
-
                     {% if error_message %}
                     <p><span class="text-danger">{{ error_message }}</span></p>
                     {% endif %}
+                    <a style="text-decoration: none;" href="{% url 'home:change_password' %}">Change Password</a>
 
                     <center>
-                        <button type="submit" class="btn btn-primary" style="background-color: #ff0066;color: white;border: none;margin-top:30px;">Sign Up</button>
+                        <button type="submit" class="btn btn-block" style="background-color: #ff0066;color: white;margin-top:30px;">Save</button>
                     </center>
                 </form>
             </div>

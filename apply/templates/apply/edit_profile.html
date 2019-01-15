@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Applicant- Sign Up</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'apply/styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/tagsinput.css' %}">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'home/tagsinput.js' %}" type="text/javascript"></script>
+
+</head>
+<body style="background-image: url('#');background-position: center; background-repeat: no-repeat;
+background-size: cover; height:100%; width:100%; min-height:100vh;">
+{% load widget_tweaks %}
+
+<div class="container-fluid vertical-align ">
+    <div class="col-sm-6 col-sm-offset-3 horizontal-align make-transparent"
+         style="padding:40px;margin-top:30px;margin-bottom:30px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <h2 style="margin-top:30px;color:white;">Edit Profile</h2>
+
+                <p><span class="text-danger small">All fields except Photo are mandatory.</span></p>
+
+                <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ user_form.first_name.label_tag }}</label>
+                        {% render_field user_form.first_name class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ user_form.last_name.label_tag }}</label>
+                        {% render_field user_form.last_name class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ form.phone_number.label_tag }}</label>
+                        {% render_field form.phone_number class="form-control" type="number" min="60000000" %}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ form.qualification.label_tag }}</label>
+                        {% render_field form.qualification class="form-control" %}
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="interests" style="color:white;">Interests:</label>
+                        <input type="text" id="interests"
+                               value="{% for interest in interests %}{{interest}},{% endfor %}"
+                               name="interests" class="form-control" data-role="tagsinput"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ form.current_city.label_tag }}</label>
+                        {% render_field form.current_city class="form-control" %}
+                    </div>
+                    <div class="form-group" style="color:white;">
+                        <label class="control-label" style="color:white;">{{ form.photo.label_tag }}</label>
+                        {% render_field form.photo type="file" accept="image/jpeg, image/png" style="color:white;" %}
+                    </div>
+                    <div class="form-group" style="color:white;">
+                        <label class="control-label" style="color:white;">{{ form.resume.label_tag }}</label>
+                        {% render_field form.resume type="file" accept="application/pdf" style="color:white;" %}
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" style="color:white;">{{ form.address.label_tag }}</label>
+                        {% render_field form.address class="form-control" %}
+                    </div>
+
+                    <a style="text-decoration: none;" href="{% url 'home:change_password' %}">Change Password</a>
+                    {% if error_message %}
+                    <p><span class="text-danger small">{{ error_message }}</span></p>
+                    {% endif %}
+
+                    <center>
+                        <button type="submit" class="btn btn-block"
+                                style="background-color: #ff0066;color: white;margin-top:30px;">
+                            Save
+                        </button>
+                    </center>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

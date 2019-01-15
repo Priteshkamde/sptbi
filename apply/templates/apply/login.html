@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+<!--suppress ALL -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +23,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
-<body style="background-image: url('https://images.pexels.com/photos/924824/pexels-photo-924824.jpeg');background-position: center; background-repeat: no-repeat;
+<body background="{% static 'home/images/background.jpeg' %}" style="background-position: center; background-repeat: no-repeat;
 background-size: cover; height:100%; width:100%; min-height:100vh;">
 
 <div class="container vertical-align">
@@ -30,12 +31,12 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
     <div class="panel panel-default " >
         <div class="panel-body">
             <center>
-                <img src="http://sptbi.spit.ac.in/assets/img/logo.png" width="200" height="50" alt="">
+                    <img src="/static/home/images/logo.png" width="200" height="50" alt="">
             </center>
             <h3 style="margin-top:30px;color:white;">Login</h3>
             <h5 style="color:white;">
                 <span>Not yet a user? </span>
-                <a href="{% if request.GET.next %}{% url 'apply:register_user' %}?next={{ request.GET.next }}{% else %}{% url 'apply:register_user' %}{% endif %}">
+                <a style="color: #ff0066;text-decoration: none;" href="{% if request.GET.next %}{% url 'apply:register_user' %}?next={{ request.GET.next }}{% else %}{% url 'apply:register_user' %}{% endif %}">
                         Register
                     </a>
             </h5>
@@ -58,8 +59,10 @@ background-size: cover; height:100%; width:100%; min-height:100vh;">
                 {% if request.GET.next %}
                     <input type="hidden" name="next" value="{{ request.GET.next }}">
                 {% endif %}
-                <button type="submit" class="btn btn-primary" style="margin-top:30px;float:right;">Login</button>
+                <button type="submit" class="btn" style="background-color: #ff0066;color: white;margin-top:30px;float:right;">Login</button>
             </form>
+
+            <a style="color: #ff0066;text-decoration: none;" href="{% url 'password_reset' %}">Forgot Password?</a>
         </div>
     </div>
     </div>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserForm, JobPostForm
+from .forms import UserForm, JobPostForm, EditProfileForm, EditJobPostForm
 from django.contrib.auth import authenticate, login, logout
-from .models import Company, JobPost, Applications, JobCategory
+from .models import Company, JobPost, Applications, JobCategory, Message
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -9,6 +9,7 @@ from django.utils.encoding import force_bytes, force_text
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
+import time
 
 
 def post_job(request):
@@ -38,9 +39,30 @@ def index(request):
     applications = list()
     company = Company.objects.filter(user=request.user)[0]
     jobs = JobPost.objects.filter(company=company)
+    messages = Message.objects.all()
+
+    if request.method == "POST":
+        message = Message()
+        message.application = Applications.objects.filter(pk=request.POST.get('id'))[0]
+        message.sender = request.user
+        message.message = request.POST.get('message')
+        message.datetime = str(time.asctime(time.localtime(time.time())))
+        message.save()
+
     for job in jobs:
         applications.append(Applications.objects.filter(post=job))
-    return render(request, 'hire/index.html', {'company': company, 'jobs': jobs, 'applications': applications})
+    return render(request, 'hire/index.html', {'company': company, 'jobs': jobs, 'applications': applications,
+                                               'messages': messages})
+
+
+def shortlist(request, app_id):
+    application = get_object_or_404(Applications, pk=app_id)
+    if application.is_shortlisted:
+        application.is_shortlisted = False
+    else:
+        application.is_shortlisted = True
+    application.save()
+    return redirect('hire:index')
 
 
 def login_user(request):
@@ -126,13 +148,17 @@ def register_user(request):
         user.email = email
         password = user_form.cleaned_data['password']
         user.set_password(password)
+        user.first_name = request.POST['company_name']
+        user.is_active = False
         user.save()
 
         company = Company()
         company.user = user
         company.name = request.POST['company_name']
+        company.website = request.POST['website']
         company.phone_number = request.POST['phone_number']
         company.description = request.POST['description']
+        company.logo = request.FILES.get('logo', False)
         company.save()
 
         current_site = get_current_site(request)
@@ -159,3 +185,55 @@ def register_user(request):
 def logout_user(request):
     logout(request)
     return redirect('hire:login_user')
+
+
+def delete_post(request, pk):
+    JobPost.objects.filter(pk=pk).delete()
+    return redirect('hire:index')
+
+
+def edit_post(request, pk):
+    post = get_object_or_404(JobPost, pk=pk)
+    if request.user.is_authenticated and Company.objects.filter(user=request.user).exists():
+        company = Company.objects.filter(user=request.user)[0]
+        if not(post.company == company):
+            return redirect('hire:index')
+        else:
+            categories = JobCategory.objects.filter(job_post=post)
+            form = EditJobPostForm(request.POST or None, instance=post)
+
+            if form.is_valid():
+                form.save()
+                for category in categories:
+                    category.job_post.remove(post)
+                    category.save()
+
+                new_categories = str(request.POST['job_category']).lower().split(",")
+                for new_category in new_categories:
+                    if JobCategory.objects.filter(job_category=new_category).exists():
+                        j = JobCategory.objects.filter(job_category=new_category)[0]
+                    else:
+                        j = JobCategory(job_category=new_category)
+                        j.save()
+                    j.job_post.add(post)
+                    j.save()
+
+                return redirect('hire:index')
+            return render(request, 'hire/edit_post_form.html', {'form': form, 'categories': categories})
+    else:
+        return redirect('hire:login_user')
+
+
+def edit_profile(request):
+    if request.user.is_authenticated and Company.objects.filter(user=request.user).exists():
+        company = Company.objects.filter(user=request.user)[0]
+        form = EditProfileForm(request.POST or None, instance=Company.objects.filter(user=request.user)[0])
+
+        if form.is_valid():
+            company.logo = request.FILES.get('logo')
+            company.save()
+            form.save()
+            return redirect('hire:index')
+        return render(request, 'hire/edit_user_form.html', {'form': form})
+    else:
+        return redirect('hire:login_user')

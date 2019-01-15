@@ -1,9 +1,10 @@
-from django.http import HttpResponseRedirect
+import time
 
-from .forms import UserForm
+from django.http import HttpResponseRedirect
+from .forms import UserForm, EditProfileForm, EditStudentProfileForm
 from django.contrib.auth import authenticate, login, logout
 from .models import Student, Interests
-from hire.models import JobPost, Applications, JobCategory
+from hire.models import JobPost, Applications, JobCategory, Message
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -90,8 +91,19 @@ def profile(request, pk):
         isSelf = True
     interests = Interests.objects.filter(student=student)
     applications = Applications.objects.filter(student=student)
+    messages = Message.objects.all()
+
+    if request.method == "POST":
+        message = Message()
+        message.application = Applications.objects.filter(pk=request.POST.get('id'))[0]
+        message.sender = request.user
+        message.message = request.POST.get('message')
+        message.datetime = str(time.asctime(time.localtime(time.time())))
+        message.save()
+
     return render(request, 'apply/profile.html',
-                  {'student': student, 'applications': applications, 'isSelf': isSelf, 'interests': interests})
+                  {'student': student, 'applications': applications, 'isSelf': isSelf, 'interests': interests,
+                   'messages': messages})
 
 
 def login_user(request):
@@ -203,6 +215,7 @@ def register_user(request):
                 i = Interests.objects.filter(interest=interest)[0]
             else:
                 i = Interests(interest=interest)
+                i.save()
             i.student.add(student)
             i.save()
 
@@ -230,3 +243,38 @@ def register_user(request):
 def logout_user(request):
     logout(request)
     return redirect('apply:login_user')
+
+
+def edit_profile(request):
+    if request.user.is_authenticated and Student.objects.filter(user=request.user).exists():
+        student = Student.objects.filter(user=request.user)[0]
+        student_form = EditStudentProfileForm(request.POST or None,
+                                              instance=student)
+        user_form = EditProfileForm(request.POST or None, instance=request.user)
+        interests = Interests.objects.filter(student=student)
+
+        if student_form.is_valid() and user_form.is_valid():
+            if student.photo:
+                student.photo.delete()
+            student.photo = request.FILES.get('photo', False)
+            student.save()
+            student_form.save()
+            user_form.save()
+            for interest in interests:
+                interest.student.remove(student)
+                interest.save()
+
+            new_interests = str(request.POST['interests']).split(",")
+            for new_interest in new_interests:
+                if Interests.objects.filter(interest=new_interest).exists():
+                    i = Interests.objects.filter(interest=new_interest)[0]
+                else:
+                    i = Interests(interest=new_interest)
+                    i.save()
+                i.student.add(student)
+                i.save()
+            return redirect('apply:profile', Student.objects.filter(user=request.user)[0].id)
+        return render(request, 'apply/edit_profile.html',
+                      {'user_form': user_form, 'form': student_form, 'interests': interests})
+    else:
+        return redirect('apply:login_user')

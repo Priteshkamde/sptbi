@@ -6,13 +6,15 @@ from apply.models import Student
 
 class Company(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. "
                                          "Up to 15 digits allowed.")
 
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=False)
     description = models.CharField(max_length=10000)
+    website = models.URLField(max_length=128)
+    logo = models.ImageField(upload_to='media/photos/hire', blank=True)
 
     def __str__(self):
         return self.name
@@ -38,3 +40,14 @@ class JobCategory(models.Model):
 class Applications(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     post = models.ForeignKey(JobPost, on_delete=models.CASCADE)
+    is_shortlisted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.student.user.first_name + " " + self.student.user.last_name
+
+
+class Message(models.Model):
+    application = models.ForeignKey(Applications, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime = models.CharField(max_length=100)
+    message = models.CharField(max_length=50000)

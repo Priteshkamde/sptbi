@@ -15,7 +15,7 @@ class Student(models.Model):
     address = models.CharField(max_length=100)
     qualification = models.CharField(max_length=100)
     current_city = models.CharField(max_length=20)
-    photo = models.ImageField(upload_to='media/photos', blank=True)
+    photo = models.ImageField(upload_to='media/photos/apply', blank=True)
     resume = models.FileField(upload_to='media/resume', blank=True)
 
     def __str__(self):
